@@ -2,9 +2,9 @@ from random import random
 
 sudoku = []
 
-def inicializate_sudoku():
-    for i in range(9):
-        sudoku.append([0]*9)
+def inicializate_sudoku(value):
+    for i in range(value):
+        sudoku.append([0]*value)
 
 def print_sudoku():
     for f in range(len(sudoku)):
@@ -32,7 +32,14 @@ def validate_sudoku():
 
     print("block1: " + str(block))
     block = validate_block(block)
-    print("block2: " + str(block))
+    print("block3: " + str(block))
+
+    contador = 0
+    for f in range(len(sudoku)):
+        for c in range(len(sudoku)):
+            if f < int(len(sudoku)/3) and c < int(len(sudoku)/3):
+                sudoku[f][c] = block[contador]
+                contador += 1
 
 def validate_block(block: list):
     contadores = [0,0,0,0,0,0,0,0,0]
@@ -43,19 +50,38 @@ def validate_block(block: list):
             contadores[num-1] +=1
 
     # Second state for the list
+    """firts estate = [1,2,3,2,3,4,5]
+        second state = [1,2,3,0,0,4,5]
+    """
     for index, num in enumerate(block):
         if contadores[num-1] > 1 and firts[num-1]:
             block[index]=0
         elif contadores[num-1] > 1:
             firts[num-1] = True
 
-    
+    print("block2: " + str(block))
+    contadores = [0,0,0,0,0,0,0,0,0]
+    for num in block:
+        if num in nums:
+            contadores[num-1] +=1
+
+    # Second state for the list
+    """second state = [1,2,3,0,0,4,5]
+        third state = [1,2,3,6,7,4,5]
+    """
+    for index, num in enumerate(contadores):
+        if num == 0:
+            value = True
+            for indicator,data in enumerate(block):
+                if data == 0 and value:
+                    block[indicator]=nums[index]
+                    value = False
 
     return block
 
 
 if __name__ == "__main__":
-    inicializate_sudoku()
+    inicializate_sudoku(9)
     create_sudoku()
     validate_sudoku()
     print("#### GAME OF SUDOKUS ####\ndesea imprimir el sudoku (Y/N)?")
