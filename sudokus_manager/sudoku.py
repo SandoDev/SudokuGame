@@ -25,31 +25,33 @@ class Sudoku:
         if styles == 3:
             for f in range(len(grid)):
                 for c in range(len(grid)):
-                    if f < int(len(grid)/3) and c < int(len(grid)/3):
+                    grid3 = int(len(grid)/3)
+                    grid6 = int(len(grid)-3)
+                    if f < grid3 and c < grid3:
                         print(Back.WHITE + Fore.BLACK +
                               "[", grid[f][c], "]", end="")
                         print(Style.RESET_ALL, end="")
-                    elif (f < int(len(grid)/3)) and (c >= int(len(grid)/3) and c < int(len(grid)-3)):
+                    elif (f < grid3) and (c >= grid3 and c < grid6):
                         print("[", grid[f][c], "]", end="")
-                    elif f < int(len(grid)/3) and c >= int(len(grid)-3):
+                    elif f < grid3 and c >= grid6:
                         print(Back.WHITE + Fore.BLACK +
                               "[", grid[f][c], "]", end="")
                         print(Style.RESET_ALL, end="")
-                    elif (f >= int(len(grid)/3) and f < int(len(grid)-3)) and c < int(len(grid)/3):
+                    elif (f >= grid3 and f < grid6) and c < grid3:
                         print("[", grid[f][c], "]", end="")
-                    elif (f >= int(len(grid)/3) and f < int(len(grid)-3)) and (c >= int(len(grid)/3) and c < int(len(grid)-3)):
+                    elif (f >= grid3 and f < grid6) and (c >= grid3 and c < grid6):
                         print(Back.WHITE + Fore.BLACK +
                               "[", grid[f][c], "]", end="")
                         print(Style.RESET_ALL, end="")
-                    elif (f >= int(len(grid)/3) and f < int(len(grid)-3)) and c >= int(len(grid)/3):
+                    elif (f >= grid3 and f < grid6) and c >= grid3:
                         print("[", grid[f][c], "]", end="")
-                    elif f >= int(len(grid)-3) and c < int(len(grid)/3):
+                    elif f >= grid6 and c < grid3:
                         print(Back.WHITE + Fore.BLACK +
                               "[", grid[f][c], "]", end="")
                         print(Style.RESET_ALL, end="")
-                    elif f >= int(len(grid)-3) and (c >= int(len(grid)/3) and c < int(len(grid)-3)):
+                    elif f >= grid6 and (c >= grid3 and c < grid6):
                         print("[", grid[f][c], "]", end="")
-                    elif f >= int(len(grid)-3) and c >= int(len(grid)/3):
+                    elif f >= grid6 and c >= grid3:
                         print(Back.WHITE + Fore.BLACK +
                               "[", grid[f][c], "]", end="")
                         print(Style.RESET_ALL, end="")
@@ -67,7 +69,12 @@ class Sudoku:
         elif styles == 2:
             for f in range(len(grid)):
                 for c in range(len(grid)):
-                    print("[", grid[f][c], "]", end="")
+                    if c % 2 == 0:
+                        print(Back.WHITE + Fore.BLACK +
+                              "[", grid[f][c], "]", end="")
+                        print(Style.RESET_ALL, end="")
+                    else:
+                        print("[", grid[f][c], "]", end="")
                 print()
         else:
             for f in range(len(grid)):
