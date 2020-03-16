@@ -133,14 +133,14 @@ class Sudoku:
                 elif f >= int(len(grid)-3) and c >= int(len(grid)/3):
                     lines_of_blocks[8].append(grid[f][c])
 
-        self.print_sudoku(lines_of_blocks, 1)
+        # self.print_sudoku(lines_of_blocks, 1)
 
         for index, line in enumerate(lines_of_blocks):
             block[index] = self.validate_line(list(line))
 
-        print(horizontal)
-        print(vertical)
-        print(block)
+        print("Horizontal: "+str(horizontal))
+        print("Vertical: "+str(vertical))
+        print("Bloques: "+str(block))
 
     def validate_line(self, line: list):
         """Validate a line of numbers
@@ -166,23 +166,194 @@ class Sudoku:
 
         return True
 
-    def validate_sudoku(self):
-        block = []
-        for f in range(len(self.sudoku)):
-            for c in range(len(self.sudoku)):
-                if f < int(len(self.sudoku)/3) and c < int(len(self.sudoku)/3):
-                    block.append(self.sudoku[f][c])
+    def fix_blocks_pseudo(self, grid):
+        self.print_sudoku(grid,3)
+        # lines_of_blocks = grid
 
-        print("block1: " + str(block))
-        block = self.create_block(block)
-        print("block3: " + str(block))
+        # for index, line in enumerate(lines_of_blocks):
+        #     lines_of_blocks[index] = self.create_block(line)
 
-        contador = 0
-        for f in range(len(self.sudoku)):
-            for c in range(len(self.sudoku)):
-                if f < int(len(self.sudoku)/3) and c < int(len(self.sudoku)/3):
-                    self.sudoku[f][c] = block[contador]
-                    contador += 1
+        # print("lines of blocks")
+        # self.print_sudoku(lines_of_blocks, 1)
+
+        block1 = self.create_block(grid[0])
+        block2 = self.create_block(grid[1])
+        block3 = self.create_block(grid[2])
+        block4 = self.create_block(grid[3])
+        block5 = self.create_block(grid[4])
+        block6 = self.create_block(grid[5])
+        block7 = self.create_block(grid[6])
+        block8 = self.create_block(grid[7])
+        block9 = self.create_block(grid[8])
+
+        print(block1)
+        print(block2)
+        print(block3)
+        print(block4)
+        print(block5)
+        print(block6)
+        print(block7)
+        print(block8)
+        print(block9)
+
+        contador1 = 0
+        contador2 = 0
+        contador3 = 0
+        contador4 = 0
+        contador5 = 0
+        contador6 = 0
+        contador7 = 0
+        contador8 = 0
+        contador9 = 0
+
+        grid3 = int(len(grid)/3)
+        grid6 = int(len(grid)-3)
+
+        for f, da in enumerate(grid):
+            for c, dat in enumerate(grid):
+                if ((f < grid3) and (c < grid3)):
+                    grid[f][c] = block1[contador1]
+                    contador1 += 1
+
+        # for f, da in enumerate(grid):
+        #     for c, dat in enumerate(grid):
+        #         if ((f < grid3) and (c >= grid3 and c < grid6)):
+        #             grid[f][c] = block2[contador2]
+        #             contador2 += 1
+
+        # for f, da in enumerate(grid):
+        #     for c, dat in enumerate(grid):
+        #         if ((f < grid3) and (c >= grid6)):
+        #             grid[f][c] = block3[contador3]
+        #             contador3 += 1
+
+        for f in range(len(grid)):
+            for c in range(len(grid)):
+                if (f >= grid3 and f < grid6) and c < grid3:
+                    grid[f][c] = block4[contador4]
+                    contador4 += 1
+
+        for f in range(len(grid)):
+            for c in range(len(grid)):
+                if (f >= grid3 and f < grid6) and (c >= grid3 and c < grid6):
+                    grid[f][c] = block5[contador5]
+                    contador5 += 1
+
+        for f in range(len(grid)):
+            for c in range(len(grid)):
+                if (f >= grid3 and f < grid6) and c >= grid6:
+                    grid[f][c] = block6[contador6]
+                    contador6 += 1
+
+        for f in range(len(grid)):
+            for c in range(len(grid)):
+                if f >= grid6 and c < grid3:
+                    grid[f][c] = block7[contador7]
+                    contador7 += 1
+
+        for f in range(len(grid)):
+            for c in range(len(grid)):
+                if f >= grid6 and (c >= grid3 and c < grid6):
+                    grid[f][c] = block8[contador8]
+                    contador8 += 1
+
+        for f in range(len(grid)):
+            for c in range(len(grid)):
+                if f >= grid6 and c >= grid6:
+                    grid[f][c] = block9[contador9]
+                    contador9 += 1
+
+        return grid
+
+    def line_to_block(self, line: list) -> list:
+        block = self.inicializate_sudoku(3, 0)
+        block[0].append(line[:3])
+        block[1].append(line[3:6])
+        block[2].append(line[6:])
+        return block
+
+    def fix_vertical_pseudo(self):
+        sudoku_transpose = np.transpose(self.sudoku)
+
+        # Of Array to list
+        sudoku_transpose = list(sudoku_transpose)
+        for index, line in enumerate(sudoku_transpose):
+            sudoku_transpose[index] = list(line)
+
+        # create correct block
+        for index, line in enumerate(sudoku_transpose):
+            sudoku_transpose[index] = self.create_block(line)
+        self.sudoku = np.transpose(sudoku_transpose)
+
+        # Of Array to list
+        self.sudoku = list(self.sudoku)
+        for index, line in enumerate(self.sudoku):
+            self.sudoku[index] = list(line)
+
+    def fix_horizontal_pseudo(self):
+        for index, line in enumerate(self.sudoku):
+            self.sudoku[index] = self.create_block(line)
+
+        # lines_of_blocks = self.inicializate_sudoku(9, 0)
+
+        # for f in range(len(self.sudoku)):
+        #     for c in range(len(self.sudoku)):
+        #         grid3 = int(len(self.sudoku)/3)
+        #         grid6 = int(len(self.sudoku)-3)
+        #         if f < grid3 and c < grid3:
+        #             lines_of_blocks[0].append(self.sudoku[f][c])
+        #         elif (f < grid3) and (c >= grid3 and c < grid6):
+        #             lines_of_blocks[1].append(self.sudoku[f][c])
+        #         elif f < grid3 and c >= grid6:
+        #             lines_of_blocks[2].append(self.sudoku[f][c])
+        #         elif (f >= grid3 and f < grid6) and c < grid3:
+        #             lines_of_blocks[3].append(self.sudoku[f][c])
+        #         elif (f >= grid3 and f < grid6) and (c >= grid3 and c < grid6):
+        #             lines_of_blocks[4].append(self.sudoku[f][c])
+        #         elif (f >= grid3 and f < grid6) and c >= grid3:
+        #             lines_of_blocks[5].append(self.sudoku[f][c])
+        #         elif f >= grid6 and c < grid3:
+        #             lines_of_blocks[6].append(self.sudoku[f][c])
+        #         elif f >= grid6 and (c >= grid3 and c < grid6):
+        #             lines_of_blocks[7].append(self.sudoku[f][c])
+        #         elif f >= grid6 and c >= grid3:
+        #             lines_of_blocks[8].append(self.sudoku[f][c])
+
+        # for index, line in enumerate(self.sudoku):
+        #     self.sudoku[index] = self.create_block(line)
+
+        # grid3 = int(len(self.sudoku)/3)
+        # grid6 = int(len(self.sudoku)-3)
+        # for f in range(len(self.sudoku)):
+        #     contador = 0
+        #     for c in range(len(self.sudoku)):
+        #         if f < grid3 and c < grid3:
+        #             self.sudoku[f][c] = lines_of_blocks[f][contador]
+        #             contador += 1
+        #         elif (f < grid3) and (c >= grid3 and c < grid6):
+        #             self.sudoku[f][c] = lines_of_blocks[f][contador]
+        #             contador += 1
+        #         elif f < grid3 and c >= grid6:
+        #             self.sudoku[f][c] = lines_of_blocks[f][contador]
+        #             contador += 1
+        #         elif (f >= grid3 and f < grid6) and c < grid3:
+        #             self.sudoku[f][c] = lines_of_blocks[f][contador]
+        #             contador += 1
+        #         elif (f >= grid3 and f < grid6) and (c >= grid3 and c < grid6):
+        #             self.sudoku[f][c] = lines_of_blocks[f][contador]
+        #             contador += 1
+        #         elif (f >= grid3 and f < grid6) and c >= grid3:
+        #             self.sudoku[f][c] = lines_of_blocks[f][contador]
+        #             contador += 1
+        #         elif f >= grid6 and c < grid3:
+        #             self.sudoku[f][c] = lines_of_blocks[f][contador]
+        #             contador += 1
+        #         elif f >= grid6 and (c >= grid3 and c < grid6):
+        #             self.sudoku[f][c] = lines_of_blocks[f][contador]
+        #             contador += 1
+        #         elif f >= grid6 and c >= grid3:
+        #             self.sudoku[f][c] = lines_of_blocks[f][contador]
+        #             contador += 1
 
     def create_block(self, block: list):
         contadores = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -202,7 +373,7 @@ class Sudoku:
             elif contadores[num-1] > 1:
                 firts[num-1] = True
 
-        print("block2: " + str(block))
+        # print("block2: " + str(block))
         contadores = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for num in block:
             if num in nums:
