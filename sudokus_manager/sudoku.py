@@ -91,8 +91,66 @@ class Sudoku:
     def create_sudoku(self):
         for f in range(len(self.sudoku)):
             for c in range(len(self.sudoku)):
-                # self.validate_number(zero_different(int(random()*10)),self.sudoku,f,c)
-                self.sudoku[f][c] = self.zero_different(int(random()*10))
+                num = self.correct_number(
+                    self.zero_different(int(random()*10)), f, c)
+                self.sudoku[f][c] = num
+
+    def correct_number(self, num, row, column):
+        """Generate the correct number in that position
+
+        Evaluates that the number is not repeated in that row, 
+        column or block; if it is repeated assign a new one that is not
+
+        Parameters:\n
+        `num` number to evaluate\n
+        `row` row in which the number is\n
+        `column` column in which the number is
+
+        """
+        rows = []
+        columns = []
+        blocks = self.inicializate_sudoku(9, 0)
+        numbers = (1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+        for line in self.sudoku:
+            rows.append(line)
+            columns.append(np.transpose(line))
+
+        grid3 = int(len(self.sudoku)/3)
+        grid6 = int(len(self.sudoku)-3)
+        for f in range(len(self.sudoku)):
+            for c in range(len(self.sudoku)):
+                if f < grid3 and c < grid3:
+                    blocks[0].append(self.sudoku[f][c])
+                elif (f < grid3) and (c >= grid3 and c < grid6):
+                    blocks[1].append(self.sudoku[f][c])
+                elif f < grid3 and c >= grid6:
+                    blocks[2].append(self.sudoku[f][c])
+                elif (f >= grid3 and f < grid6) and c < grid3:
+                    blocks[3].append(self.sudoku[f][c])
+                elif (f >= grid3 and f < grid6) and (c >= grid3 and c < grid6):
+                    blocks[4].append(self.sudoku[f][c])
+                elif (f >= grid3 and f < grid6) and c >= grid3:
+                    blocks[5].append(self.sudoku[f][c])
+                elif f >= grid6 and c < grid3:
+                    blocks[6].append(self.sudoku[f][c])
+                elif f >= grid6 and (c >= grid3 and c < grid6):
+                    blocks[7].append(self.sudoku[f][c])
+                elif f >= grid6 and c >= grid3:
+                    blocks[8].append(self.sudoku[f][c])
+
+        print("SUDOKU-----------------")
+        self.print_sudoku(self.sudoku, 3)
+        print("FILAS-----------------")
+        self.print_sudoku(rows, 1)
+        print("COLUMNAS-----------------")
+        self.print_sudoku(columns, 2)
+        print("BLOQUES-----------------")
+        self.print_sudoku(blocks, 1)
+        if not ((num in rows) and (num in columns) and (num in blocks)):
+            return num
+        else:
+            return 0
 
     def validate_grid(self, grid: list):
         vertical = [False, False, False, False,
@@ -167,7 +225,7 @@ class Sudoku:
         return True
 
     def fix_blocks_pseudo(self, grid):
-        self.print_sudoku(grid,3)
+        self.print_sudoku(grid, 3)
         # lines_of_blocks = grid
 
         # for index, line in enumerate(lines_of_blocks):
