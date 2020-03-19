@@ -91,14 +91,15 @@ class Sudoku:
     def create_sudoku(self):
         for f in range(len(self.sudoku)):
             for c in range(len(self.sudoku)):
-                num = self.correct_number(
-                    self.zero_different(int(random()*10)), f, c)
-                self.sudoku[f][c] = num
+                # num = self.correct_number(
+                #     self.zero_different(int(random()*10)), f, c)
+                # self.sudoku[f][c] = num
+                self.sudoku[f][c] = self.zero_different(int(random()*10))
 
     def correct_number(self, num, row, column):
         """Generate the correct number in that position
 
-        Evaluates that the number is not repeated in that row, 
+        Evaluates that the number is not repeated in that row,
         column or block; if it is repeated assign a new one that is not
 
         Parameters:\n
@@ -139,18 +140,45 @@ class Sudoku:
                 elif f >= grid6 and c >= grid3:
                     blocks[8].append(self.sudoku[f][c])
 
-        print("SUDOKU-----------------")
-        self.print_sudoku(self.sudoku, 3)
-        print("FILAS-----------------")
-        self.print_sudoku(rows, 1)
-        print("COLUMNAS-----------------")
-        self.print_sudoku(columns, 2)
-        print("BLOQUES-----------------")
-        self.print_sudoku(blocks, 1)
-        if not ((num in rows) and (num in columns) and (num in blocks)):
-            return num
+        # print("SUDOKU-----------------")
+        # self.print_sudoku(self.sudoku, 3)
+        # print("FILAS-----------------")
+        # self.print_sudoku(rows, 1)
+        # print("COLUMNAS-----------------")
+        # self.print_sudoku(columns, 2)
+        # print("BLOQUES-----------------")
+        # self.print_sudoku(blocks, 1)
+
+        num_row = num in rows
+        num_column = num in columns
+        num_block = num in blocks
+
+        if num_row and num_column and num_block:
+            print("Todas verdaderas")
+            print(num_row, num_column, num_block)
+        elif num_row and num_column:
+            print("solo fila y columna verdaderas")
+            print(num_row, num_column, num_block)
+        elif num_column and num_block:
+            print("solo bloque y columna verdaderas")
+            print(num_row, num_column, num_block)
+        elif num_row and num_block:
+            print("solo fila y bloque verdaderas")
+            print(num_row, num_column, num_block)
+        elif num_row:
+            print("solo fila verdadera")
+            print(num_row, num_column, num_block)
+        elif num_column:
+            print("solo columna verdadera")
+            print(num_row, num_column, num_block)
+        elif num_block:
+            print("solo bloque verdadera")
+            print(num_row, num_column, num_block)
         else:
-            return 0
+            print("Todas falsas")
+            print(num_row, num_column, num_block)
+
+        return num
 
     def validate_grid(self, grid: list):
         vertical = [False, False, False, False,
