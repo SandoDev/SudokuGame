@@ -89,18 +89,64 @@ class Sudoku:
             return num
 
     def create_sudoku(self):
-        for f in range(len(self.sudoku)):
-            for c in range(len(self.sudoku)):
-                # num = self.correct_number(
-                #     self.zero_different(int(random()*10)), f, c)
-                # self.sudoku[f][c] = num
-                self.sudoku[f][c] = self.zero_different(int(random()*10))
+        columns = [9, 9, 9, 9, 9, 9, 9, 9, 9]
 
-    def correct_number(self, num, row, column):
+        for line, data in enumerate(self.sudoku):
+            column = self.zero_different(int(random()*10))
+            if columns[column - 1] == 1:
+                for index, data2 in enumerate(columns):
+                    if data2 == 9:
+                        column = index + 1
+                        break
+
+            columns[column - 1] = 1
+            print(column)
+            self.number_assignment(column)
+
+        # for f in range(len(self.sudoku)):
+        #     for c in range(len(self.sudoku)):
+        #         num = self.correct_number(
+        #             self.zero_different(int(random()*10)), f, c)
+        #         self.sudoku[f][c] = num
+        #         #self.sudoku[f][c] = self.zero_different(int(random()*10))
+
+    def generate(self):
+        generado = int(random()*10)
+        if generado > 8:
+            return self.generate()
+        else:
+            return generado
+
+    def number_assignment(self, number: int):
+        """Algorithm creator"""
+        columns = [9, 9, 9, 9, 9, 9, 9, 9, 9]
+
+        for line, data in enumerate(self.sudoku):
+            column = self.generate()
+
+            if columns[column] == 1:
+                for index, data2 in enumerate(columns):
+                    if data2 == 9:
+                        column = index
+                        break
+
+            columns[column] = 1
+            if not(number in self.sudoku[line]):
+                if self.sudoku[line][column] == 0:
+                    self.sudoku[line][column] = number
+                else:
+                    columns[column] = 9
+                    for index2, data3 in enumerate(self.sudoku[line]):
+                        if data3 == 0:
+                            self.sudoku[line][index2] = 0
+                            break
+
+    # Old strategy for asign numbers to sudoku
+    def old_correct_number(self, num, row, column):
         """Generate the correct number in that position
 
         Evaluates that the number is not repeated in that row,
-        column or block; if it is repeated assign a new one that is not
+        column or block; if it is repeated assign zero ## a new one that is not
 
         Parameters:\n
         `num` number to evaluate\n
@@ -108,77 +154,114 @@ class Sudoku:
         `column` column in which the number is
 
         """
-        rows = []
-        columns = []
-        blocks = self.inicializate_sudoku(9, 0)
+        rows = self.sudoku[row]
+        sudoku_transpose = np.transpose(self.sudoku)
+        columns = sudoku_transpose[column]
+        current_block = [False, False, False, False,
+                         False, False, False, False, False, ]
+        blocks = []
         numbers = (1, 2, 3, 4, 5, 6, 7, 8, 9)
-
-        for line in self.sudoku:
-            rows.append(line)
-            columns.append(np.transpose(line))
 
         grid3 = int(len(self.sudoku)/3)
         grid6 = int(len(self.sudoku)-3)
+        if row < grid3 and column < grid3:
+            current_block[0] = True
+        elif (row < grid3) and (column >= grid3 and column < grid6):
+            current_block[1] = True
+        elif row < grid3 and column >= grid6:
+            current_block[2] = True
+        elif (row >= grid3 and row < grid6) and column < grid3:
+            current_block[3] = True
+        elif (row >= grid3 and row < grid6) and (column >= grid3 and column < grid6):
+            current_block[4] = True
+        elif (row >= grid3 and row < grid6) and column >= grid3:
+            current_block[5] = True
+        elif row >= grid6 and column < grid3:
+            current_block[6] = True
+        elif row >= grid6 and (column >= grid3 and column < grid6):
+            current_block[7] = True
+        elif row >= grid6 and column >= grid6:
+            current_block[8] = True
+
         for f in range(len(self.sudoku)):
             for c in range(len(self.sudoku)):
-                if f < grid3 and c < grid3:
-                    blocks[0].append(self.sudoku[f][c])
-                elif (f < grid3) and (c >= grid3 and c < grid6):
-                    blocks[1].append(self.sudoku[f][c])
-                elif f < grid3 and c >= grid6:
-                    blocks[2].append(self.sudoku[f][c])
-                elif (f >= grid3 and f < grid6) and c < grid3:
-                    blocks[3].append(self.sudoku[f][c])
-                elif (f >= grid3 and f < grid6) and (c >= grid3 and c < grid6):
-                    blocks[4].append(self.sudoku[f][c])
-                elif (f >= grid3 and f < grid6) and c >= grid3:
-                    blocks[5].append(self.sudoku[f][c])
-                elif f >= grid6 and c < grid3:
-                    blocks[6].append(self.sudoku[f][c])
-                elif f >= grid6 and (c >= grid3 and c < grid6):
-                    blocks[7].append(self.sudoku[f][c])
-                elif f >= grid6 and c >= grid3:
-                    blocks[8].append(self.sudoku[f][c])
+                if f < grid3 and c < grid3 and current_block[0]:
+                    blocks.append(self.sudoku[f][c])
+                elif (f < grid3) and (c >= grid3 and c < grid6) and current_block[1]:
+                    blocks.append(self.sudoku[f][c])
+                elif f < grid3 and c >= grid6 and current_block[2]:
+                    blocks.append(self.sudoku[f][c])
+                elif (f >= grid3 and f < grid6) and c < grid3 and current_block[3]:
+                    blocks.append(self.sudoku[f][c])
+                elif (f >= grid3 and f < grid6) and (c >= grid3 and c < grid6) and current_block[4]:
+                    blocks.append(self.sudoku[f][c])
+                elif (f >= grid3 and f < grid6) and c >= grid3 and current_block[5]:
+                    blocks.append(self.sudoku[f][c])
+                elif f >= grid6 and c < grid3 and current_block[6]:
+                    blocks.append(self.sudoku[f][c])
+                elif f >= grid6 and (c >= grid3 and c < grid6) and current_block[7]:
+                    blocks.append(self.sudoku[f][c])
+                elif f >= grid6 and c >= grid6 and current_block[8]:
+                    blocks.append(self.sudoku[f][c])
 
         # print("SUDOKU-----------------")
         # self.print_sudoku(self.sudoku, 3)
         # print("FILAS-----------------")
-        # self.print_sudoku(rows, 1)
+        # print(rows)
         # print("COLUMNAS-----------------")
-        # self.print_sudoku(columns, 2)
+        # print(columns)
         # print("BLOQUES-----------------")
-        # self.print_sudoku(blocks, 1)
+        # print(blocks)
 
         num_row = num in rows
         num_column = num in columns
         num_block = num in blocks
 
-        if num_row and num_column and num_block:
-            print("Todas verdaderas")
-            print(num_row, num_column, num_block)
-        elif num_row and num_column:
-            print("solo fila y columna verdaderas")
-            print(num_row, num_column, num_block)
-        elif num_column and num_block:
-            print("solo bloque y columna verdaderas")
-            print(num_row, num_column, num_block)
-        elif num_row and num_block:
-            print("solo fila y bloque verdaderas")
-            print(num_row, num_column, num_block)
-        elif num_row:
-            print("solo fila verdadera")
-            print(num_row, num_column, num_block)
-        elif num_column:
-            print("solo columna verdadera")
-            print(num_row, num_column, num_block)
-        elif num_block:
-            print("solo bloque verdadera")
-            print(num_row, num_column, num_block)
-        else:
-            print("Todas falsas")
-            print(num_row, num_column, num_block)
+        counter_row = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        counter_column = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        counter_block = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-        return num
+        for data in rows:
+            counter_row[data-1] += 1
+
+        for data in columns:
+            counter_column[data-1] += 1
+
+        for data in blocks:
+            counter_block[data-1] += 1
+
+        if num_row and num_column and num_block:
+            return 0
+            # print("Todas verdaderas")
+            # print(num_row, num_column, num_block)
+        elif num_row and num_column:
+            return 0
+            # print("solo fila y columna verdaderas")
+            # print(num_row, num_column, num_block)
+        elif num_column and num_block:
+            return 0
+            # print("solo bloque y columna verdaderas")
+            # print(num_row, num_column, num_block)
+        elif num_row and num_block:
+            return 0
+            # print("solo fila y bloque verdaderas")
+            # print(num_row, num_column, num_block)
+        elif num_row:
+            return 0
+            # print("solo fila verdadera")
+            # print(num_row, num_column, num_block)
+        elif num_column:
+            return 0
+            # print("solo columna verdadera")
+            # print(num_row, num_column, num_block)
+        elif num_block:
+            return 0
+            # print("solo bloque verdadera")
+            # print(num_row, num_column, num_block)
+        else:
+            return num
+            # print("Todas falsas")
+            # print(num_row, num_column, num_block)
 
     def validate_grid(self, grid: list):
         vertical = [False, False, False, False,
