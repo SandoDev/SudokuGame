@@ -17,6 +17,43 @@ class Sudoku:
 
         return grid
 
+    def blocks_to_line(self, grid):
+        """
+        Transform the blocks of 3*3 of grid in horizontal lines of 1*9 in a new grid
+
+        Parameters:\n
+        `grid` grid of 9*9 (list or array)\n
+
+        Return:\n
+        `list` list of list of 9*9 with the blocks of 3*3 of `grid` converted to lines of 1*9\n
+        """
+        blocks = self.inicializate_sudoku(9, 0)
+
+        grid3 = int(len(grid)/3)
+        grid6 = int(len(grid)-3)
+        for f in range(len(grid)):
+            for c in range(len(grid)):
+                if f < grid3 and c < grid3:
+                    blocks[0].append(grid[f][c])
+                elif (f < grid3) and (c >= grid3 and c < grid6):
+                    blocks[1].append(grid[f][c])
+                elif f < grid3 and c >= grid6:
+                    blocks[2].append(grid[f][c])
+                elif (f >= grid3 and f < grid6) and c < grid3:
+                    blocks[3].append(grid[f][c])
+                elif (f >= grid3 and f < grid6) and (c >= grid3 and c < grid6):
+                    blocks[4].append(grid[f][c])
+                elif (f >= grid3 and f < grid6) and c >= grid3:
+                    blocks[5].append(grid[f][c])
+                elif f >= grid6 and c < grid3:
+                    blocks[6].append(grid[f][c])
+                elif f >= grid6 and (c >= grid3 and c < grid6):
+                    blocks[7].append(grid[f][c])
+                elif f >= grid6 and c >= grid6:
+                    blocks[8].append(grid[f][c])
+
+        return blocks
+
     def print_sudoku(self, grid, styles=3):
         """styles = 1: Horizontal\n
         styles = 2: Vertical\n
@@ -82,8 +119,17 @@ class Sudoku:
                     print("[", grid[f][c], "]", end="")
                 print()
 
-    def zero_different(self, num):
-        if num == 0:
+    def zero_different(self, num=0):
+        """
+        Generate numbers between 1 and 9
+
+        Parameters:\n
+        `num` (optional) cadidate number to return\n
+
+        Return:\n
+        `int` number between 1 and 9
+        """
+        if num < 1 or num > 9:
             return self.zero_different(int(random()*10))
         else:
             return num
@@ -111,6 +157,12 @@ class Sudoku:
         #         #self.sudoku[f][c] = self.zero_different(int(random()*10))
 
     def generate(self):
+        """
+        Generate numbers between 0 and 8
+
+        Return:\n
+        `int` number between 0 and 8
+        """
         generado = int(random()*10)
         if generado > 8:
             return self.generate()
