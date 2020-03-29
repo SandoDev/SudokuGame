@@ -363,6 +363,37 @@ class Sudoku:
         print("Vertical: "+str(vertical))
         print("Bloques: "+str(block))
 
+        horizontal_true = False
+        vertical_true = False
+        blocks_true = False
+        for hori in horizontal:
+            if hori == True:
+                horizontal_true = True
+            else:
+                horizontal_true = False
+                break
+
+        for verti in vertical:
+            if verti == True:
+                vertical_true = True
+            else:
+                vertical_true = False
+                break
+
+        for blo in block:
+            if blo == True:
+                blocks_true = True
+            else:
+                blocks_true = False
+                break
+
+        if horizontal_true and vertical_true and blocks_true:
+            print("si si si, lo has logrado")
+            return True
+        else:
+            print("has fallado, sigue intentando")
+            return False
+
     def validate_line(self, line: list):
         """Validate a line of numbers
 

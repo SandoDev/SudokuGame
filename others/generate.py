@@ -1,8 +1,8 @@
-from random import random
-import numpy as np
 import sys
 sys.path.append('./')
 from sudokus_manager.sudoku import Sudoku
+from random import random
+import numpy as np
 
 
 def generate_new_sudoku(sudo):
@@ -77,6 +77,13 @@ def generate_new_sudoku(sudo):
                         # assigning the number to sudoku
                         sudoku[row][column] = number
                         break
+                    elif (column in discarded or column in blocked or column in partially_blocked) and column == values[row][len(values[row])-1]:
+
+                        # descartar la COLUMNA utilizada en la iteración anterior de este NUMERO
+                        # devolverse a la iteración aterior de este NUMERO # linea 5 FILA-1
+
+                        # assigning the number to sudoku
+                        sudoku[row][column] = 0
 
             print("print row: ", row)
             print("print column: ", column)
@@ -85,13 +92,15 @@ def generate_new_sudoku(sudo):
             print("print partially_blocked: ", partially_blocked)
             print("print discarded: ", discarded)
             print("print numbers: ", numbers)
-            print("print values")
+            print("-----print values-----")
             for value in values:
                 print(value)
-            print("print sudoku")
+            print("-----print sudoku-----")
             sudo.print_sudoku(sudoku)
 
             print()
+
+    return sudoku
 
 
 def random_in_list(values: list):
@@ -108,4 +117,5 @@ def random_in_list(values: list):
 # Principal main
 if __name__ == "__main__":
     sudoku = Sudoku()
-    generate_new_sudoku(sudoku)
+    sus = generate_new_sudoku(sudoku)
+    sudoku.validate_grid(sus)
