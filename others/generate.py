@@ -30,7 +30,7 @@ def generate_new_sudoku(sudo):
             column = random_in_list(values[row])
             if row == 0:
                 partially_blocked = []
-            if row == 3:
+            elif row == 3:
                 partially_blocked = []
             elif row == 6:
                 partially_blocked = []
@@ -41,28 +41,16 @@ def generate_new_sudoku(sudo):
                 blocked.append(column)
                 if column < 3:
                     for partially in range(0, 3):
-                        if partially != column and partially != 99:
-                            try:
-                                partially_blocked.append(
-                                    values[row][partially])
-                            except:
-                                partially_blocked.append(99)
+                        if partially != column:
+                            partially_blocked.append(partially)
                 elif column >= 3 and column < 6:
                     for partially in range(3, 6):
-                        if partially != column and partially != 99:
-                            try:
-                                partially_blocked.append(
-                                    values[row][partially])
-                            except:
-                                partially_blocked.append(99)
+                        if partially != column:
+                            partially_blocked.append(partially)
                 elif column > 5:
                     for partially in range(6, 9):
-                        if partially != column and partially != 99:
-                            try:
-                                partially_blocked.append(
-                                    values[row][partially])
-                            except:
-                                partially_blocked.append(99)
+                        if partially != column:
+                            partially_blocked.append(partially)
                 values[row].remove(column)
 
                 # assigning the number to sudoku
@@ -74,28 +62,16 @@ def generate_new_sudoku(sudo):
                         blocked.append(column)
                         if column < 3:
                             for partially in range(0, 3):
-                                if partially != column and partially != 99:
-                                    try:
-                                        partially_blocked.append(
-                                            values[row][partially])
-                                    except:
-                                        partially_blocked.append(99)
+                                if partially != column:
+                                    partially_blocked.append(partially)
                         elif column >= 3 and column < 6:
                             for partially in range(3, 6):
-                                if partially != column and partially != 99:
-                                    try:
-                                        partially_blocked.append(
-                                            values[row][partially])
-                                    except:
-                                        partially_blocked.append(99)
+                                if partially != column:
+                                    partially_blocked.append(partially)
                         elif column > 5:
                             for partially in range(6, 9):
-                                if partially != column and partially != 99:
-                                    try:
-                                        partially_blocked.append(
-                                            values[row][partially])
-                                    except:
-                                        partially_blocked.append(99)
+                                if partially != column:
+                                    partially_blocked.append(partially)
                         values[row].remove(column)
 
                         # assigning the number to sudoku
@@ -108,6 +84,7 @@ def generate_new_sudoku(sudo):
             print("print blocked: ", blocked)
             print("print partially_blocked: ", partially_blocked)
             print("print discarded: ", discarded)
+            print("print numbers: ", numbers)
             print("print values")
             for value in values:
                 print(value)
