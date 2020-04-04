@@ -1,8 +1,8 @@
 import sys
 sys.path.append('./')
 from sudokus_manager.sudoku import Sudoku
-from random import random
 import numpy as np
+from random import random
 
 
 def generate_new_sudoku(sudo):
@@ -26,7 +26,8 @@ def generate_new_sudoku(sudo):
         number = random_in_list(numbers)
         numbers.remove(number)
         blocked = []
-        for row in range(9):  # una por cada FILA del sudoku
+        row = 0
+        while row <= 8:  # una por cada FILA del sudoku
             column = random_in_list(values[row])
             if row == 0:
                 partially_blocked = []
@@ -37,7 +38,10 @@ def generate_new_sudoku(sudo):
 
             print("print partially_blocked: ", partially_blocked)
 
-            if column not in discarded and column not in blocked and column not in partially_blocked:
+            if column not in discarded and \
+                    column not in blocked and \
+                    column not in partially_blocked:
+
                 blocked.append(column)
                 if column < 3:
                     for partially in range(0, 3):
@@ -55,10 +59,14 @@ def generate_new_sudoku(sudo):
 
                 # assigning the number to sudoku
                 sudoku[row][column] = number
+                discarded = []
             else:
                 for value in values[row]:
                     column = value
-                    if column not in discarded and column not in blocked and column not in partially_blocked:
+                    if column not in discarded and \
+                            column not in blocked and \
+                            column not in partially_blocked:
+
                         blocked.append(column)
                         if column < 3:
                             for partially in range(0, 3):
@@ -76,14 +84,46 @@ def generate_new_sudoku(sudo):
 
                         # assigning the number to sudoku
                         sudoku[row][column] = number
+                        discarded = [] # Limpio descartados
                         break
-                    elif (column in discarded or column in blocked or column in partially_blocked) and column == values[row][len(values[row])-1]:
+                    elif (column in discarded or
+                          column in blocked or
+                          column in partially_blocked) and \
+                            column == values[row][len(values[row])-1]:
 
-                        # descartar la COLUMNA utilizada en la iteración anterior de este NUMERO
-                        # devolverse a la iteración aterior de este NUMERO # linea 5 FILA-1
+                        column_discared = discarded_column(row, number, sudoku)
+                        discarded=[]#toca crear matriz para descartar por filas
+                        discarded.append(column_discared) # descartar la COLUMNA utilizada en la iteración anterior de este NUMERO,,,,,hay que limpiar a discared aqui
+                        sudoku[row-1][column_discared]=0 # Limpiar la pocisión del sudoku
+                        blocked.remove(column_discared) # Limpiar el dato de los bloqueados
+                        values[row-1].append(column_discared)
+                        # Limpiar de los parcialmente bloqueados
+                        if column_discared < 3:
+                            for partially in range(0, 3):
+                                if partially != column_discared:
+                                    try:
+                                        partially_blocked.remove(partially)
+                                    except:
+                                        pass
+                        elif column_discared >= 3 and column_discared < 6:
+                            for partially in range(3, 6):
+                                if partially != column_discared:
+                                    try:
+                                        partially_blocked.remove(partially)
+                                    except:
+                                        pass
+                        elif column_discared > 5:
+                            for partially in range(6, 9):
+                                if partially != column_discared:
+                                    try:
+                                        partially_blocked.remove(partially)
+                                    except:
+                                        pass
 
-                        # assigning the number to sudoku
-                        sudoku[row][column] = 0
+                        row -= 2 # devolverse a la iteración aterior de este NUMERO # linea 5 FILA-1
+                        break
+
+            row += 1
 
             print("print row: ", row)
             print("print column: ", column)
@@ -101,6 +141,15 @@ def generate_new_sudoku(sudo):
             print()
 
     return sudoku
+
+
+def discarded_column(current_row, current_number, grid):
+    column_discared = 99
+    for index, value in enumerate(grid[current_row-1]):
+        if value == current_number:
+            column_discared = index
+            break
+    return column_discared
 
 
 def random_in_list(values: list):
