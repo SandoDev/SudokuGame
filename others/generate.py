@@ -92,7 +92,7 @@ def generate_new_sudoku(sudo):
                             column == values[row][len(values[row])-1]:
 
                         column_discared = discarded_column(row, number, sudoku)
-                        discarded=[]#toca crear matriz para descartar por filas
+                        #discarded=[]#toca crear matriz para descartar por filas
                         discarded.append(column_discared) # descartar la COLUMNA utilizada en la iteración anterior de este NUMERO,,,,,hay que limpiar a discared aqui
                         sudoku[row-1][column_discared]=0 # Limpiar la pocisión del sudoku
                         blocked.remove(column_discared) # Limpiar el dato de los bloqueados
