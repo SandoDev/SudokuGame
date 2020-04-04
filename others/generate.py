@@ -24,7 +24,8 @@ def generate_new_sudoku(sudo):
         discarded[index] = []
 
     # principal for
-    while numbers != []:  # una por cada numero diferente en un sudoku
+    while len(numbers) != 0:  # una por cada numero diferente en un sudoku
+    #for i in range(6):  # una por cada numero diferente en un sudoku
         number = random_in_list(numbers)
         past_number.append(number)  # el pasado es el ultimo indice -1
         numbers.remove(number)
@@ -115,7 +116,7 @@ def generate_new_sudoku(sudo):
                           column in partially_blocked) and \
                             column == values[row][len(values[row])-1]:
 
-                        if row == 0:# TODO 3remover number actual de past_number y 1 añadirlo a numbers
+                        if row == 0:
                             numbers.append(number)
                             current_num = number
                             number = past_number[-2] #2
@@ -125,7 +126,7 @@ def generate_new_sudoku(sudo):
                                 blocked.append(discarded_column(past_row+1, number, sudoku))
 
                             column_discared = discarded_column(row+1, number, sudoku)
-                            discarded[row] = [] # TODO limpiar todos los descartados, discareded necesita ser dictionary para asociar las pocisiones descartadas a un numero
+                            discarded[row] = [] # TODO discareded necesita ser dictionary para asociar las pocisiones descartadas a un numero
                             discarded[row].append(column_discared)
                             sudoku[row][column_discared] = 0
                             values[row].append(column_discared)
