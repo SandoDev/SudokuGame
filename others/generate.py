@@ -52,6 +52,7 @@ def generate_new_sudoku(sudo):
                     column = random_in_list(values[row],dictionary_memory[str(number)])
                     if column == 99:
                         print("las listas son iguales :'( ")
+                        break
                         numbers.append(number)
                         current_num = number
                         number = past_number[-2]  # 2
@@ -307,23 +308,23 @@ def generate_new_sudoku(sudo):
 
             row += 1
 
-            print("print row: ", row)
-            print("print column: ", column)
-            print("print number: ", number)
-            print("print blocked: ", blocked)
-            print("print partially_blocked: ", partially_blocked)
-            print("print numbers: ", numbers)
-            print("print memory_dict: ", dictionary_memory)
-            print("-----print discarded-----")
-            for value in discarded:
-                print(value)
-            print("-----print values-----")
-            for value in values:
-                print(value)
-            print("-----print sudoku-----")
-            sudo.print_sudoku(sudoku)
+            # print("print row: ", row)
+            # print("print column: ", column)
+            # print("print number: ", number)
+            # print("print blocked: ", blocked)
+            # print("print partially_blocked: ", partially_blocked)
+            # print("print numbers: ", numbers)
+            # print("print memory_dict: ", dictionary_memory)
+            # print("-----print discarded-----")
+            # for value in discarded:
+            #     print(value)
+            # print("-----print values-----")
+            # for value in values:
+            #     print(value)
+            # print("-----print sudoku-----")
+            # sudo.print_sudoku(sudoku)
 
-            print()
+            # print()
 
     return sudoku
 
@@ -365,17 +366,17 @@ if __name__ == "__main__":
 
     ini_time = default_timer()
     end_time = 0
-    sus = generate_new_sudoku(sudoku)
-    valor = sudoku.validate_grid(sus)
+    # sus = generate_new_sudoku(sudoku)
+    # valor = sudoku.validate_grid(sus)
     
     #----------------------------------------------------
-    # for i in range(10000):
-    #     sus = generate_new_sudoku(sudoku)
-    #     valor = sudoku.validate_grid(sus)
-    #     if valor:
-    #         conteo_buenas += 1
-    #     else:
-    #         conteo_malas += 1
+    for i in range(1000):
+        sus = generate_new_sudoku(sudoku)
+        valor = sudoku.validate_grid(sus)
+        if valor:
+            conteo_buenas += 1
+        else:
+            conteo_malas += 1
     #----------------------------------------------------
     end_time = default_timer()
     print(end_time-ini_time,"/",conteo_buenas,"/",conteo_malas)
