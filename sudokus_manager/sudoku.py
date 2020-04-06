@@ -359,9 +359,9 @@ class Sudoku:
         for index, line in enumerate(lines_of_blocks):
             block[index] = self.validate_line(list(line))
 
-        print("Horizontal: "+str(horizontal))
-        print("Vertical: "+str(vertical))
-        print("Bloques: "+str(block))
+        # print("Horizontal: "+str(horizontal))
+        # print("Vertical: "+str(vertical))
+        # print("Bloques: "+str(block))
 
         horizontal_true = False
         vertical_true = False
@@ -388,10 +388,10 @@ class Sudoku:
                 break
 
         if horizontal_true and vertical_true and blocks_true:
-            print("si si si, lo has logrado")
+            # print("si si si, lo has logrado")
             return True
         else:
-            print("has fallado, sigue intentando")
+            # print("has fallado, sigue intentando")
             return False
 
     def validate_line(self, line: list):

@@ -51,7 +51,7 @@ def generate_new_sudoku(sudo):
                 if column in dictionary_memory[str(number)]:
                     column = random_in_list(values[row],dictionary_memory[str(number)])
                     if column == 99:
-                        print("las listas son iguales :'( ")
+                        #print("las listas son iguales :'( ")
                         break
                         numbers.append(number)
                         current_num = number
@@ -124,7 +124,7 @@ def generate_new_sudoku(sudo):
                                 partially_blocked.append(partially)
 
             if row == 8 and column in dictionary_memory[str(number)]:
-                print("revisaaaar")
+                #print("revisaaaar")
                 column_discared = discarded_column(
                     row, number, sudoku)
                 discarded[row] = []
