@@ -1,13 +1,46 @@
+from random import random
+import numpy as np
+from sudokus_manager.sudoku import Sudoku
 import sys
 sys.path.append('./')
-from sudokus_manager.sudoku import Sudoku
-import numpy as np
-from random import random
 
 
 sudo = Sudoku()
 grid = sudo.sudoku
 # sudo.print_sudoku(grid)
+
+
+def create_sudo(number):
+    values = sudo.inicializate_sudoku(9, 0)
+    grid = sudo.inicializate_sudoku(9)
+    # numbers = (1, 2, 3, 4, 5, 6, 7, 8, 9)
+    index_columns = (0, 1, 2, 3, 4, 5, 6, 7, 8)
+
+    for row in range(9):
+        values[row] = list(index_columns)
+
+    for row in range(9):
+        column = sudo.generate()
+
+        if not(column in values[row]):
+            for new_column in values[row]:
+                if new_column != 99:
+                    column = new_column
+                    break
+
+        values[row].remove(column)
+
+        if column < 3:
+            for sub_columns in values[row]:
+                
+        elif column >= 3 and column < 6:
+        else:
+            pass
+
+        grid[row][column] = number
+
+    sudo.print_sudoku(grid)
+    print(values)
 
 
 def number_assignment2(number: int):
@@ -21,27 +54,27 @@ def number_assignment2(number: int):
 
     # Repeat for each column
     for line, data in enumerate(grid):
-        new_list=[]
+        new_list = []
         if line < 3:
             column = sudo.generate()
-            for index_repeat,repeat_columns in enumerate(columns):
-                if repeat_columns ==9:
+            for index_repeat, repeat_columns in enumerate(columns):
+                if repeat_columns == 9:
                     new_list.append(index_repeat)
-                            
+
             if not(column in new_list):
                 for new in new_list:
-                    #------------------Validar que grid[line][index]==0
-                    column=new
+                    # ------------------Validar que grid[line][index]==0
+                    column = new
                     break
 
-            #------------------Validar que grid[line][index]==0
-
+            # ------------------Validar que grid[line][index]==0
 
             if column < 3:
                 if blocks[0] == "libre":
                     blocks[0] = "ocupado"
                     for index in range(0, 3):
-                        if index != column and columns[index] != 1: #------------------Validar que grid[line][index]==0
+                        # ------------------Validar que grid[line][index]==0
+                        if index != column and columns[index] != 1:
                             columns[index] = 10
                             #column = index
             elif column >= 3 and column <= 5:
@@ -89,13 +122,13 @@ def number_assignment2(number: int):
 
         elif line >= 3 and line <= 5:
             column = sudo.generate()
-            for index_repeat,repeat_columns in enumerate(columns):
-                if repeat_columns ==9:
+            for index_repeat, repeat_columns in enumerate(columns):
+                if repeat_columns == 9:
                     new_list.append(index_repeat)
-            
+
             if not(column in new_list):
                 for new in new_list:
-                    column=new
+                    column = new
                     break
             if column < 3:
                 if blocks[3] == "libre":
@@ -104,7 +137,7 @@ def number_assignment2(number: int):
                         if index != column and columns[index] != 1:
                             columns[index] = 10
                             #column = index
-                            #asignar el index como nueva columna
+                            # asignar el index como nueva columna
             elif column >= 3 and column <= 5:
                 if blocks[4] == "libre":
                     blocks[4] = "ocupado"
@@ -149,13 +182,13 @@ def number_assignment2(number: int):
                         columns[index_column] = 9
         else:
             column = sudo.generate()
-            for index_repeat,repeat_columns in enumerate(columns):
-                if repeat_columns ==9:
+            for index_repeat, repeat_columns in enumerate(columns):
+                if repeat_columns == 9:
                     new_list.append(index_repeat)
-            
+
             if not(column in new_list):
                 for new in new_list:
-                    column=new
+                    column = new
                     break
             if column < 3:
                 if blocks[6] == "libre":
@@ -284,7 +317,10 @@ numbers2 = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 #     number_assignment(num)
 
 
-number_assignment2(1)
-number_assignment2(8)
-number_assignment2(7)
-sudo.print_sudoku(grid)
+# number_assignment2(1)
+# number_assignment2(8)
+# number_assignment2(7)
+# sudo.print_sudoku(grid)
+
+
+create_sudo(1)
