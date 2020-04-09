@@ -6,7 +6,7 @@ sys.path.append('./')
 from sudokus_manager.sudoku import Sudoku
 
 
-def generate_new_sudoku(sudo):
+def principal_algorithm(sudo):
     """
     Generate new sudoku of 9x9
     """
@@ -357,7 +357,7 @@ def random_in_list(values: list, excludes_memory=[]):
 
 
 # Principal main
-if __name__ == "__main__":
+def create_new_sudoku():
     sudoku = Sudoku()
     valor = False
 
@@ -366,17 +366,21 @@ if __name__ == "__main__":
 
     ini_time = default_timer()
     end_time = 0
-    # sus = generate_new_sudoku(sudoku)
-    # valor = sudoku.validate_grid(sus)
+
+    while not valor:
+        sus = principal_algorithm(sudoku)
+        valor = sudoku.validate_grid(sus)
+        
     
     #----------------------------------------------------
-    for i in range(1000):
-        sus = generate_new_sudoku(sudoku)
-        valor = sudoku.validate_grid(sus)
-        if valor:
-            conteo_buenas += 1
-        else:
-            conteo_malas += 1
+    # for i in range(1000):
+    #     sus = generate_new_sudoku(sudoku)
+    #     valor = sudoku.validate_grid(sus)
+    #     if valor:
+    #         conteo_buenas += 1
+    #     else:
+    #         conteo_malas += 1
     #----------------------------------------------------
     end_time = default_timer()
     print(end_time-ini_time,"/",conteo_buenas,"/",conteo_malas)
+    return sus
