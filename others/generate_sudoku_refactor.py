@@ -1,12 +1,13 @@
 from timeit import default_timer
 import numpy as np
 from random import random
+import random as rn
 import sys
 sys.path.append('./')
 from sudokus_manager.sudoku import Sudoku
 
 
-def principal_algorithm(sudo):
+def principal_algorithm(instance_sudoku):
     """
     Generate new sudoku of 9x9.\n
     This algorithm has a 61% probability of generating a sudoku correctly\n
@@ -14,7 +15,7 @@ def principal_algorithm(sudo):
     
     Parameters
     ----------
-        sudo: instance of class Sudoku()
+        instance_sudoku: instance of class Sudoku()
 
     Retunrs
     ----------
@@ -23,10 +24,13 @@ def principal_algorithm(sudo):
 
     """
     # define variables
-    sudoku = sudo.inicializate_sudoku(9)
-    values = sudo.inicializate_sudoku(9)
-    discarded = sudo.inicializate_sudoku(9)
+    sudoku = instance_sudoku.inicializate_sudoku(9)
+    values = instance_sudoku.inicializate_sudoku(9)
+    discarded = instance_sudoku.inicializate_sudoku(9)
     numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    blocked = []
+    partially_blocked = []
+    past_number = []
     dictionary_memory = {'1': [],
                          '2': [],
                          '3': [],
@@ -36,10 +40,6 @@ def principal_algorithm(sudo):
                          '7': [],
                          '8': [],
                          '9': []}
-
-    blocked = []
-    partially_blocked = []
-    past_number = []
 
     # fill the grid values
     for index, row in enumerate(values):
@@ -62,7 +62,7 @@ def principal_algorithm(sudo):
             if row == 0:
                 partially_blocked = []
                 if column in dictionary_memory[str(number)]:
-                    column = random_in_list(values[row],dictionary_memory[str(number)])
+                    column = random_in_list(values[row],memory=dictionary_memory[str(number)])
                     if column == 99:
                         #print("las listas son iguales :'( ")
                         break
@@ -334,7 +334,7 @@ def principal_algorithm(sudo):
             # for value in values:
             #     print(value)
             # print("-----print sudoku-----")
-            # sudo.print_sudoku(sudoku)
+            # instance_sudoku.print_sudoku(sudoku)
 
             # print()
 
@@ -353,50 +353,68 @@ def discarded_column(current_row, current_number, grid):
     return column_discared
 
 
-def random_in_list(values: list, excludes_memory=[]):
-    """Generate a random number in a list [0,9]"""
+def random_in_list(values: list,
+                   blockeds: list = [],
+                   partially_blockeds: list = [],
+                   discarded: list = [],
+                   memory: list = []) -> int:
+    """
+    Generates a random number among the possible in a list
 
-    if values == excludes_memory:
+    Parameters
+    ----------
+        values: list
+            list from which the number is generated
+        blockeds: list, (optional)
+            list with values to exclude
+        partially_blockeds: list, (optional)
+            list with values to exclude
+        discarded: list, (optional)
+            list with values to exclude
+        memory: list, (optional)
+            list with values to exclude
+
+    Returns
+    ----------
+        int: generated random number
+    """
+
+    set_values = set(values)
+    set_blockeds = set(blockeds)
+    set_partially_blockeds = set(partially_blockeds)
+    set_discarded = set(discarded)
+    set_memory = set(memory)
+
+    none = set_blockeds | set_partially_blockeds | set_discarded | set_memory
+    final_list = list(set_values - none)
+
+    if final_list == []:
         return 99
-
-    if values == None:
-        print(values, " ¿una lista vacia?, ¿enserio?")
-    number = int(random()*10)
-    if number not in values or number in excludes_memory:
-        return random_in_list(values, excludes_memory)
     else:
-        return number
+        return rn.choice(final_list)
 
 
-# Principal main
-def create_new_sudoku():
-    sudoku = Sudoku()
+def create_new_sudoku(sudoku_instance):
+    """
+    Generate new sudoku of 9x9.\n
+    
+    Parameters
+    ----------
+        sudoku_instance: instance of class Sudoku()
+
+    Retunrs
+    ----------
+        sudoku: list
+            list of lists with new sudoku of 9x9
+
+    """
     valor = False
 
-    conteo_buenas = 0
-    conteo_malas = 0
-
-    ini_time = default_timer()
-    end_time = 0
-
     while not valor:
-        sus = principal_algorithm(sudoku)
-        valor = sudoku.validate_grid(sus)
-        
-    
-    #----------------------------------------------------
-    # for i in range(1000):
-    #     sus = generate_new_sudoku(sudoku)
-    #     valor = sudoku.validate_grid(sus)
-    #     if valor:
-    #         conteo_buenas += 1
-    #     else:
-    #         conteo_malas += 1
-    #----------------------------------------------------
-    end_time = default_timer()
-    print(end_time-ini_time,"/",conteo_buenas,"/",conteo_malas)
-    return sus
+        sudoku = principal_algorithm(sudoku_instance)
+        valor = sudoku_instance.validate_grid(sudoku)
 
+    return sudoku
 
 # Principal main
 if __name__ == "__main__":

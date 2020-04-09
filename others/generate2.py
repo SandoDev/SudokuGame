@@ -7,8 +7,20 @@ from timeit import default_timer
 
 
 def generate_new_sudoku(sudo):
-    """Generate new sudoku of 9x9"""
+    """
+    Generate new sudoku of 9x9.\n
+    This algorithm has a 85% probability of generating a sudoku correctly\n
+    The average speed of execution of 1000 sudokus is 6 seconds on a machine with standard resources
+    
+    Parameters
+    ----------
+        sudo: instance of class Sudoku()
 
+    Retunrs
+    ----------
+        sudoku: list
+            list with new sudoku of 9x9
+    """
     # define variables
     sudoku = sudo.inicializate_sudoku(9)
     discarded = sudo.inicializate_sudoku(9)
@@ -273,7 +285,7 @@ if __name__ == "__main__":
 
     ini_time = default_timer()
     end_time = 0
-    
+
     while not valor:
         sus = generate_new_sudoku(sudoku)
         valor = sudoku.validate_grid(sus)
