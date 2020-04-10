@@ -427,18 +427,18 @@ if __name__ == "__main__":
     ini_time = default_timer()
     end_time = 0
 
-    while not valor:
-        sus = principal_algorithm(sudoku)
-        valor = sudoku.validate_grid(sus)
-
-    # ----------------------------------------------------
-    # for i in range(1000):
+    # while not valor:
     #     sus = principal_algorithm(sudoku)
     #     valor = sudoku.validate_grid(sus)
-    #     if valor:
-    #         conteo_buenas += 1
-    #     else:
-    #         conteo_malas += 1
+
+    # ----------------------------------------------------
+    for i in range(1000):
+        sus = principal_algorithm(sudoku)
+        valor = sudoku.validate_grid(sus)
+        if valor:
+            conteo_buenas += 1
+        else:
+            conteo_malas += 1
     # ----------------------------------------------------
     end_time = default_timer()
     print(end_time-ini_time, "/", conteo_buenas, "/", conteo_malas)
