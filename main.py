@@ -2,11 +2,13 @@ from sudoku import Sudoku
 import grid as gr
 from colorama import deinit
 from others.generate_sudoku import create_new_sudoku
+from views.main_view import main_menu
 
 # Main principal
 if __name__ == "__main__":
-    gr.print_grid(gr.new_grid(9,9,0),3)
-    sudoku = Sudoku()
+    # gr.print_grid(gr.new_grid(9,9,0),3)
+    # sudoku = Sudoku()
+    main_menu()
     #sus = create_new_sudoku()
     #sudoku.create_sudoku()
     #sudoku.fix_horizontal_pseudo()
