@@ -1,3 +1,4 @@
+from grid import grid as gr
 from random import random
 import numpy as np
 from colorama import init
@@ -7,16 +8,10 @@ from colorama import Fore, Back, Style
 class Sudoku:
 
     def __init__(self, size=9):
-        self.sudoku = self.inicializate_sudoku(size)
+        self.sudoku = gr.new_grid()
         init()
 
-    def inicializate_sudoku(self, rows, columns=9):
-        grid = []
-        for i in range(rows):
-            grid.append([0]*columns)
-
-        return grid
-
+    # Sudo
     def blocks_to_line(self, grid):
         """
         Transform the blocks of 3*3 of grid in horizontal lines of 1*9 in a new grid
@@ -54,71 +49,7 @@ class Sudoku:
 
         return blocks
 
-    def print_sudoku(self, grid, styles=3):
-        """styles = 1: Horizontal\n
-        styles = 2: Vertical\n
-        styles = 3: Bloques\n
-        """
-        if styles == 3:
-            for f in range(len(grid)):
-                for c in range(len(grid)):
-                    grid3 = int(len(grid)/3)
-                    grid6 = int(len(grid)-3)
-                    if f < grid3 and c < grid3:
-                        print(Back.WHITE + Fore.BLACK +
-                              "[", grid[f][c], "]", end="")
-                        print(Style.RESET_ALL, end="")
-                    elif (f < grid3) and (c >= grid3 and c < grid6):
-                        print("[", grid[f][c], "]", end="")
-                    elif f < grid3 and c >= grid6:
-                        print(Back.WHITE + Fore.BLACK +
-                              "[", grid[f][c], "]", end="")
-                        print(Style.RESET_ALL, end="")
-                    elif (f >= grid3 and f < grid6) and c < grid3:
-                        print("[", grid[f][c], "]", end="")
-                    elif (f >= grid3 and f < grid6) and (c >= grid3 and c < grid6):
-                        print(Back.WHITE + Fore.BLACK +
-                              "[", grid[f][c], "]", end="")
-                        print(Style.RESET_ALL, end="")
-                    elif (f >= grid3 and f < grid6) and c >= grid3:
-                        print("[", grid[f][c], "]", end="")
-                    elif f >= grid6 and c < grid3:
-                        print(Back.WHITE + Fore.BLACK +
-                              "[", grid[f][c], "]", end="")
-                        print(Style.RESET_ALL, end="")
-                    elif f >= grid6 and (c >= grid3 and c < grid6):
-                        print("[", grid[f][c], "]", end="")
-                    elif f >= grid6 and c >= grid3:
-                        print(Back.WHITE + Fore.BLACK +
-                              "[", grid[f][c], "]", end="")
-                        print(Style.RESET_ALL, end="")
-                print()
-        elif styles == 1:
-            for f in range(len(grid)):
-                for c in range(len(grid)):
-                    if f % 2 == 0:
-                        print(Back.WHITE + Fore.BLACK +
-                              "[", grid[f][c], "]", end="")
-                        print(Style.RESET_ALL, end="")
-                    else:
-                        print("[", grid[f][c], "]", end="")
-                print()
-        elif styles == 2:
-            for f in range(len(grid)):
-                for c in range(len(grid)):
-                    if c % 2 == 0:
-                        print(Back.WHITE + Fore.BLACK +
-                              "[", grid[f][c], "]", end="")
-                        print(Style.RESET_ALL, end="")
-                    else:
-                        print("[", grid[f][c], "]", end="")
-                print()
-        else:
-            for f in range(len(grid)):
-                for c in range(len(grid)):
-                    print("[", grid[f][c], "]", end="")
-                print()
-
+    # Sudo
     def zero_different(self, num=0):
         """
         Generate numbers between 1 and 9
@@ -134,6 +65,7 @@ class Sudoku:
         else:
             return num
 
+    # Sudo
     def create_sudoku(self):
         columns = [9, 9, 9, 9, 9, 9, 9, 9, 9]
 
@@ -156,6 +88,7 @@ class Sudoku:
         #         self.sudoku[f][c] = num
         #         #self.sudoku[f][c] = self.zero_different(int(random()*10))
 
+    # Sudo
     def generate(self):
         """
         Generate numbers between 0 and 8
@@ -169,6 +102,7 @@ class Sudoku:
         else:
             return generado
 
+    # Sudo
     def number_assignment(self, number: int):
         """Algorithm creator"""
         columns = [9, 9, 9, 9, 9, 9, 9, 9, 9]
@@ -315,6 +249,7 @@ class Sudoku:
             # print("Todas falsas")
             # print(num_row, num_column, num_block)
 
+    # Sudo
     def validate_grid(self, grid: list):
         vertical = [False, False, False, False,
                     False, False, False, False, False]
@@ -359,9 +294,9 @@ class Sudoku:
         for index, line in enumerate(lines_of_blocks):
             block[index] = self.validate_line(list(line))
 
-        print("Horizontal: "+str(horizontal))
-        print("Vertical: "+str(vertical))
-        print("Bloques: "+str(block))
+        # print("Horizontal: "+str(horizontal))
+        # print("Vertical: "+str(vertical))
+        # print("Bloques: "+str(block))
 
         horizontal_true = False
         vertical_true = False
@@ -388,12 +323,13 @@ class Sudoku:
                 break
 
         if horizontal_true and vertical_true and blocks_true:
-            print("si si si, lo has logrado")
+            # print("si si si, lo has logrado")
             return True
         else:
-            print("has fallado, sigue intentando")
+            # print("has fallado, sigue intentando")
             return False
 
+    # sudo
     def validate_line(self, line: list):
         """Validate a line of numbers
 
@@ -418,6 +354,7 @@ class Sudoku:
 
         return True
 
+    #Sudo
     def fix_blocks_pseudo(self, grid):
         self.print_sudoku(grid, 3)
         # lines_of_blocks = grid
@@ -517,6 +454,7 @@ class Sudoku:
 
         return grid
 
+    # Sudo
     def line_to_block(self, line: list) -> list:
         block = self.inicializate_sudoku(3, 0)
         block[0].append(line[:3])
@@ -524,6 +462,7 @@ class Sudoku:
         block[2].append(line[6:])
         return block
 
+    # Sudo
     def fix_vertical_pseudo(self):
         sudoku_transpose = np.transpose(self.sudoku)
 
@@ -542,6 +481,7 @@ class Sudoku:
         for index, line in enumerate(self.sudoku):
             self.sudoku[index] = list(line)
 
+    # Sudo
     def fix_horizontal_pseudo(self):
         for index, line in enumerate(self.sudoku):
             self.sudoku[index] = self.create_block(line)
@@ -607,6 +547,7 @@ class Sudoku:
         #             self.sudoku[f][c] = lines_of_blocks[f][contador]
         #             contador += 1
 
+    # Sudo
     def create_block(self, block: list):
         contadores = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         nums = (1, 2, 3, 4, 5, 6, 7, 8, 9)

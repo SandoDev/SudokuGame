@@ -1,6 +1,8 @@
 import unittest
 from sudokus_manager.sudoku import Sudoku
+from others.generate_sudoku_refactor import create_new_sudoku
 from random import random
+import random as rn
 import numpy as np
 
 class TestSudokuMethods(unittest.TestCase):
@@ -10,11 +12,15 @@ class TestSudokuMethods(unittest.TestCase):
 
     def test_validate_line(self):
         line = [2, 1, 4, 6, 7, 8, 3, 9, 5]  # Ok, correct line
-        # line = [2, 1, 4, 6, 8, 3, 9, 5] # Failure, incorrect quantity of numbers
-        # line = [2, 1, 4, 0, 7, 8, 3, 9, 5]  # Failure, line with zero
-        # line = [2, 2, 4, 6, 7, 8, 3, 9, 5, 1] # Failure, incorrect quantity of numbers
-        # line = [2, 1, 4, 6, 7, 8, 3, 9, 2]  # Failure, repeated numbers
-        self.assertEqual(self.sudoku.validate_line(line), True)
+        line2 = [2, 1, 4, 6, 8, 3, 9, 5] # Failure, incorrect quantity of numbers
+        line3 = [2, 1, 4, 0, 7, 8, 3, 9, 5]  # Failure, line with zero
+        line4 = [2, 2, 4, 6, 7, 8, 3, 9, 5, 1] # Failure, incorrect quantity of numbers
+        line5 = [2, 1, 4, 6, 7, 8, 3, 9, 2]  # Failure, repeated numbers
+        self.assertTrue(self.sudoku.validate_line(line))
+        self.assertFalse(self.sudoku.validate_line(line2))
+        self.assertFalse(self.sudoku.validate_line(line3))
+        self.assertFalse(self.sudoku.validate_line(line4))
+        self.assertFalse(self.sudoku.validate_line(line5))
 
     def test_blocks_to_line_1(self):
         """Tests that convert blocks to lines in a grid (list of lists)"""
@@ -103,6 +109,11 @@ class TestSudokuMethods(unittest.TestCase):
             number = self.sudoku.zero_different()  # Generate number
             self.assertGreaterEqual(number, 1)  # number >= 1
             self.assertLessEqual(number, 9)  # number <= 9
+
+    def test_create_new_sudoku(self):
+        for i in range(1000):
+            sudo = create_new_sudoku(self.sudoku)
+            self.assertTrue(self.sudoku.validate_grid(sudo))
 
 
 if __name__ == '__main__':

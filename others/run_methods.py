@@ -1,8 +1,9 @@
-from random import random
-import numpy as np
-from sudokus_manager.sudoku import Sudoku
 import sys
 sys.path.append('./')
+from sudokus_manager.sudoku import Sudoku
+from random import random
+import random as rn
+import numpy as np
 
 
 sudo = Sudoku()
@@ -32,8 +33,9 @@ def create_sudo(number):
 
         if column < 3:
             for sub_columns in values[row]:
-                
+                pass
         elif column >= 3 and column < 6:
+            pass
         else:
             pass
 
@@ -311,7 +313,7 @@ def validate_in_blocks(line, number, blocks) -> list:
     return ready_blocks
 
 
-numbers2 = (1, 2, 3, 4, 5, 6, 7, 8, 9)
+#numbers2 = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 
 # for num in numbers2:
 #     number_assignment(num)
@@ -323,4 +325,54 @@ numbers2 = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 # sudo.print_sudoku(grid)
 
 
-create_sudo(1)
+# create_sudo(1)
+
+def random_in_list(values: list,
+                   blockeds: list = [],
+                   partially_blockeds: list = [],
+                   discarded: list = [],
+                   memory: list = []) -> int:
+    """
+    Generates a random number among the possible in a list
+
+    Parameters
+    ----------
+        values: list
+            list from which the number is generated
+        blockeds: list, (optional)
+            list with values to exclude
+        partially_blockeds: list, (optional)
+            list with values to exclude
+        discarded: list, (optional)
+            list with values to exclude
+        memory: list, (optional)
+            list with values to exclude
+
+    Returns
+    ----------
+        int: generated random number
+    """
+
+    set_values = set(values)
+    set_blockeds = set(blockeds)
+    set_partially_blockeds = set(partially_blockeds)
+    set_discarded = set(discarded)
+    set_memory = set(memory)
+
+    none = set_blockeds | set_partially_blockeds | set_discarded | set_memory
+    final_list = list(set_values - none)
+
+    if final_list == []:
+        return 99
+    else:
+        return rn.choice(final_list)
+
+
+values = [0, 1, 2, 3, 5, 6, 7, 8]
+blockeds = [0, 3, 7, 1]
+partially_bloq = [0, 2]
+discarded = [2, 3]
+memory = [1, 6]
+
+numero = random_in_list(values, blockeds, partially_bloq, discarded, memory)
+print(numero)
