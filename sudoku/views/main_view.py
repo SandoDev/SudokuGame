@@ -1,8 +1,12 @@
 from colorama import init
 from colorama import Fore, Back, Style
+from .utils import generate_title
+
+MAIN_TITTLE = generate_title("GAME OF SUDOKUS", 25, '#')
 
 
 def main_menu():
+    """Main menu"""
     value, options = text_menu()
     if value not in options:
         print(Fore.RED + "Wrong choice!!")
@@ -17,17 +21,20 @@ def main_menu():
         print("See scores")
 
     if value == '2':
-        value, options = quick_game()
-        if value not in options:
+        values_quick, options_quick = quick_game()
+        if values_quick not in options_quick:
             print(Fore.RED + "Wrong choice!!")
             print(Style.RESET_ALL)
             main_menu()
 
-        if value == '0':
+        if values_quick == '0':
             exit_game()
 
-        if value == '00':
+        if values_quick == '00':
             main_menu()
+
+        if values_quick == '1':
+            values_easy, options_easy = easy_game()
 
         # TODO por completar esta vista
 
@@ -49,13 +56,15 @@ def main_menu():
 
 
 def exit_game():
+    """Exit the game"""
     print("Bye bye... :D")
     exit
 
 
 def text_menu():
+    """Main menu texts"""
     options = ['0', '1', '2', '3', '4', '5', '6']
-    tittle = "#### GAME OF SUDOKUS ####"
+    tittle = MAIN_TITTLE
     [print('-', end="") for letter in tittle]
     print()
     print(Style.BRIGHT + Back.GREEN + tittle, end="")
@@ -73,9 +82,10 @@ def text_menu():
 
 
 def quick_game():
+    """Quick game texts"""
     options = ['00', '0', '1', '2', '3', '4']
-    tittle = "#### GAME OF SUDOKUS ####"
-    sub = generate_subtittle('QUICK GAME', len(tittle), '=')
+    tittle = MAIN_TITTLE
+    sub = generate_title('QUICK GAME', len(tittle), '=')
     [print('-', end="") for letter in tittle]
     print()
     print(Style.BRIGHT + Fore.GREEN + tittle)
@@ -93,43 +103,23 @@ def quick_game():
     return input(), options
 
 
-def generate_subtittle(sub: str, length: int, complement: str = '-'):
-    """Generate a subtittle with specific length"""
-    final = ""
-    len_sub = len(sub)
-    value = length-len_sub
-    left = 0
-    rigth = 0
-    side_value = 0
-    complement = complement
-    separator = ""
-    if len_sub < length:
-        separator = " "
-    elif len_sub == length:
-        return sub
-    else:
-        for i in range(length):
-            final = final + complement
-        return final
-
-    if value % 2 == 0:
-        side_value = int(value/2)-1
-        for i in range(length):
-            if i < side_value:
-                final = final + complement
-            elif i > (side_value+len_sub)+1:
-                final = final + complement
-            elif (side_value+len_sub)+1 == i:
-                final = final + separator+sub+separator
-    else:
-        left = int((value - 1)/2)
-        rigth = left+1+len_sub
-        for i in range(length):
-            if i < left:
-                final = final + complement
-            elif i > rigth:
-                final = final + complement
-            elif left+1 == i:
-                final = final + separator+sub+separator
-
-    return final
+def easy_game():
+    """Easy game texts"""
+    options = ['00', '0', '1', '2', '3', '4']
+    tittle = MAIN_TITTLE
+    sub = generate_title('EASY GAME', len(tittle), '=')
+    [print('-', end="") for letter in tittle]
+    print()
+    print(Style.BRIGHT + Fore.GREEN + tittle)
+    print()
+    print(Fore.GREEN + sub, end="")
+    print(Style.RESET_ALL)
+    print(options[2]+" - Easy")
+    print(options[3]+" - Medium")
+    print(options[4]+" - Hard")
+    print(options[5]+" - Researcher")
+    print(options[0]+" - Return")
+    print(options[1]+" - Exit")
+    print()
+    print("choose your option: ", end="")
+    return input(), options
