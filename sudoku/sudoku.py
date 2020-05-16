@@ -3,6 +3,7 @@ from random import random
 import numpy as np
 from colorama import init
 from colorama import Fore, Back, Style
+from . import generate_sudoku_v1
 
 
 class Sudoku:
@@ -10,6 +11,14 @@ class Sudoku:
     def __init__(self, size=9):
         self.sudoku = gr.new_grid()
         init()
+
+    def create_new_sudoku(self):
+        valor = False
+        while not valor:
+            sus = generate_sudoku_v1.principal_algorithm()
+            valor = self.validate_grid(sus)
+
+        gr.print_grid(sus, 3)
 
     # Sudo
     def blocks_to_line(self, grid):
@@ -266,7 +275,7 @@ class Sudoku:
         for index, column in enumerate(grid_transpose):
             vertical[index] = self.validate_line(list(column))
 
-        lines_of_blocks = self.inicializate_sudoku(9, 0)
+        lines_of_blocks = gr.new_grid(9, 0)  # self.inicializate_sudoku(9, 0)
 
         for f in range(len(grid)):
             for c in range(len(grid)):
@@ -354,7 +363,7 @@ class Sudoku:
 
         return True
 
-    #Sudo
+    # Sudo
     def fix_blocks_pseudo(self, grid):
         self.print_sudoku(grid, 3)
         # lines_of_blocks = grid
