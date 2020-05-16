@@ -1,21 +1,17 @@
-from timeit import default_timer
 import numpy as np
 from random import random
-import random as rn
-import sys
-sys.path.append('./')
-from sudokus_manager.sudoku import Sudoku
+from grid import grid as gr
 
 
-def principal_algorithm(instance_sudoku):
+def principal_algorithm():
     """
     Generate new sudoku of 9x9.\n
-    This algorithm has a 80% probability of generating a sudoku correctly\n
-    The average speed of execution of 1000 sudokus is 10 seconds on a machine with standard resources
-    
+    This algorithm has a 61% probability of generating a sudoku correctly\n
+    The average speed of execution of 1000 sudokus is 3 seconds on a machine with standard resources
+
     Parameters
     ----------
-        instance_sudoku: instance of class Sudoku()
+        sudo: instance of class Sudoku()
 
     Retunrs
     ----------
@@ -24,13 +20,10 @@ def principal_algorithm(instance_sudoku):
 
     """
     # define variables
-    sudoku = instance_sudoku.inicializate_sudoku(9)
-    values = instance_sudoku.inicializate_sudoku(9)
-    discarded = instance_sudoku.inicializate_sudoku(9)
+    sudoku = gr.new_grid()  # sudo.inicializate_sudoku(9)
+    values = gr.new_grid()  # sudo.inicializate_sudoku(9)
+    discarded = gr.new_grid()  # sudo.inicializate_sudoku(9)
     numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    blocked = []
-    partially_blocked = []
-    past_number = []
     dictionary_memory = {'1': [],
                          '2': [],
                          '3': [],
@@ -41,6 +34,10 @@ def principal_algorithm(instance_sudoku):
                          '8': [],
                          '9': []}
 
+    blocked = []
+    partially_blocked = []
+    past_number = []
+
     # fill the grid values
     for index, row in enumerate(values):
         values[index] = [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -48,7 +45,7 @@ def principal_algorithm(instance_sudoku):
 
     # principal while
     while len(numbers) != 0:  # una por cada numero diferente en un sudoku
-        
+
         number = random_in_list(numbers)
         past_number.append(number)  # el pasado es el ultimo indice -1
         numbers.remove(number)
@@ -56,13 +53,14 @@ def principal_algorithm(instance_sudoku):
         row = 0
         for index in range(9):
             discarded[index] = []
-        
+
         while row <= 8:  # una por cada FILA del sudoku
             column = random_in_list(values[row])
             if row == 0:
                 partially_blocked = []
                 if column in dictionary_memory[str(number)]:
-                    column = random_in_list(values[row],memory=dictionary_memory[str(number)])
+                    column = random_in_list(
+                        values[row], dictionary_memory[str(number)])
                     if column == 99:
                         #print("las listas son iguales :'( ")
                         break
@@ -107,7 +105,7 @@ def principal_algorithm(instance_sudoku):
                                     except:
                                         pass
 
-                        #row -= 1  # devolverse a la iteración aterior de este NUMERO # linea 5 FILA-1
+                        # row -= 1  # devolverse a la iteración aterior de este NUMERO # linea 5 FILA-1
                         continue
 
             elif row == 3:
@@ -137,7 +135,7 @@ def principal_algorithm(instance_sudoku):
                                 partially_blocked.append(partially)
 
             if row == 8 and column in dictionary_memory[str(number)]:
-                #print("revisaaaar")
+                # print("revisaaaar")
                 column_discared = discarded_column(
                     row, number, sudoku)
                 discarded[row] = []
@@ -230,7 +228,8 @@ def principal_algorithm(instance_sudoku):
                             column == values[row][len(values[row])-1]:
 
                         if row-1 == 0:
-                            dictionary_memory[str(number)].append(discarded_column(row, number, sudoku))
+                            dictionary_memory[str(number)].append(
+                                discarded_column(row, number, sudoku))
                             # agregar esa columna a la memoria del numero
                             # de tal forma que ese numero no pueda volver
                             # a ser asignado a esa columna
@@ -250,7 +249,8 @@ def principal_algorithm(instance_sudoku):
                             # TODO discareded necesita ser dictionary para asociar las pocisiones descartadas a un numero
                             discarded[row] = []
                             discarded[row].append(column_discared)
-                            dictionary_memory[str(number)].append(column_discared)
+                            dictionary_memory[str(number)].append(
+                                column_discared)
                             sudoku[row][column_discared] = 0
                             values[row].append(column_discared)
                             blocked.remove(column_discared)
@@ -334,7 +334,7 @@ def principal_algorithm(instance_sudoku):
             # for value in values:
             #     print(value)
             # print("-----print sudoku-----")
-            # instance_sudoku.print_sudoku(sudoku)
+            # gr.new_grid() sudo.print_sudoku(sudoku)
 
             # print()
 
@@ -353,92 +353,16 @@ def discarded_column(current_row, current_number, grid):
     return column_discared
 
 
-def random_in_list(values: list,
-                   blockeds: list = [],
-                   partially_blockeds: list = [],
-                   discarded: list = [],
-                   memory: list = []) -> int:
-    """
-    Generates a random number among the possible in a list
+def random_in_list(values: list, excludes_memory=[]):
+    """Generate a random number in a list [0,9]"""
 
-    Parameters
-    ----------
-        values: list
-            list from which the number is generated
-        blockeds: list, (optional)
-            list with values to exclude
-        partially_blockeds: list, (optional)
-            list with values to exclude
-        discarded: list, (optional)
-            list with values to exclude
-        memory: list, (optional)
-            list with values to exclude
-
-    Returns
-    ----------
-        int: generated random number
-    """
-
-    set_values = set(values)
-    set_blockeds = set(blockeds)
-    set_partially_blockeds = set(partially_blockeds)
-    set_discarded = set(discarded)
-    set_memory = set(memory)
-
-    none = set_blockeds | set_partially_blockeds | set_discarded | set_memory
-    final_list = list(set_values - none)
-
-    if final_list == []:
+    if values == excludes_memory:
         return 99
+
+    if values == None:
+        print(values, " ¿una lista vacia?, ¿enserio?")
+    number = int(random()*10)
+    if number not in values or number in excludes_memory:
+        return random_in_list(values, excludes_memory)
     else:
-        return rn.choice(final_list)
-
-
-def create_new_sudoku(sudoku_instance):
-    """
-    Generate new sudoku of 9x9.\n
-    
-    Parameters
-    ----------
-        sudoku_instance: instance of class Sudoku()
-
-    Retunrs
-    ----------
-        sudoku: list
-            list of lists with new sudoku of 9x9
-
-    """
-    valor = False
-
-    while not valor:
-        sudoku = principal_algorithm(sudoku_instance)
-        valor = sudoku_instance.validate_grid(sudoku)
-
-    return sudoku
-
-# Principal main
-if __name__ == "__main__":
-    sudoku = Sudoku()
-    valor = False
-
-    conteo_buenas = 0
-    conteo_malas = 0
-
-    ini_time = default_timer()
-    end_time = 0
-
-    # while not valor:
-    #     sus = principal_algorithm(sudoku)
-    #     valor = sudoku.validate_grid(sus)
-
-    # ----------------------------------------------------
-    for i in range(1000):
-        sus = principal_algorithm(sudoku)
-        valor = sudoku.validate_grid(sus)
-        if valor:
-            conteo_buenas += 1
-        else:
-            conteo_malas += 1
-    # ----------------------------------------------------
-    end_time = default_timer()
-    print(end_time-ini_time, "/", conteo_buenas, "/", conteo_malas)
+        return number

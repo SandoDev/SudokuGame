@@ -1,6 +1,7 @@
 from colorama import init
 from colorama import Fore, Back, Style
 from .utils import generate_title
+from ..sudoku import Sudoku
 
 MAIN_TITTLE = generate_title("GAME OF SUDOKUS", 25, '#')
 
@@ -35,6 +36,16 @@ def main_menu():
 
         if values_quick == '1':
             values_easy, options_easy = easy_game()
+            if values_easy not in options_easy:
+                print(Fore.RED + "Wrong choice!!")
+                print(Style.RESET_ALL)
+                main_menu()
+
+            if values_easy == '0':
+                exit_game()
+
+            if values_easy == '00':
+                main_menu()
 
         # TODO por completar esta vista
 
@@ -105,7 +116,7 @@ def quick_game():
 
 def easy_game():
     """Easy game texts"""
-    options = ['00', '0', '1', '2', '3', '4']
+    options = ['1', '2', '3', '4', '00', '0']
     tittle = MAIN_TITTLE
     sub = generate_title('EASY GAME', len(tittle), '=')
     [print('-', end="") for letter in tittle]
@@ -114,12 +125,16 @@ def easy_game():
     print()
     print(Fore.GREEN + sub, end="")
     print(Style.RESET_ALL)
-    print(options[2]+" - Easy")
-    print(options[3]+" - Medium")
-    print(options[4]+" - Hard")
-    print(options[5]+" - Researcher")
-    print(options[0]+" - Return")
-    print(options[1]+" - Exit")
+
+    # TODO print time
+    # TODO llamar al sudoku e imprimirlo
+    sudo = Sudoku()
+    sudo.create_new_sudoku()
+
+    print(options[0]+" - Entregar respuesta")
+    print(options[1]+" - Pistas")
+    print(options[4]+" - Return")
+    print(options[5]+" - Exit")
     print()
     print("choose your option: ", end="")
     return input(), options
